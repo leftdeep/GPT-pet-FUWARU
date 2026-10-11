@@ -1,0 +1,133 @@
+{
+  "Name": "芙哇噜 · Fuwaru",
+  "DisplayScale": 0.9,
+  "Clips": {
+    "Idle": {
+      "Video": "idle.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 143,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "普通待机",
+      "PreviewGroup": "Idle"
+    },
+    "IdleLook": {
+      "Video": "idle-look.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 241,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "待机张望",
+      "PreviewGroup": "Idle"
+    },
+    "Happy": {
+      "Video": "happy-jump.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 95,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "开心跳跃",
+      "PreviewGroup": "ClickInteraction"
+    },
+    "WalkStart": {
+      "Video": "walk3-start.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 59,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "转身提裙",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    },
+    "Walking": {
+      "Video": "walk3-loop.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 29,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "走路",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    },
+    "WalkEnd": {
+      "Video": "walk3-end.webm",
+      "VideoWidth": 384,
+      "VideoHeight": 384,
+      "VideoFrameCount": 55,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "收步放裙",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    }
+  },
+  "StandingHeightRatio": 0.5442708333333334,
+  "WalkingSequence": {
+    "EndMoveFrames": 16,
+    "SpeedAt240": 55
+  },
+  "Transitions": {
+    "DurationSeconds": 0.2,
+    "IdleEntryFrame": 9,
+    "IdleToWalking": {
+      "Scale": 0.9989477602514454,
+      "OffsetX": -9.844138537502547e-05,
+      "OffsetY": 0.0,
+      "LeftOffsetX": -0.0010227035053995543,
+      "PivotX": 0.5,
+      "PivotY": 0.9010416666666666
+    },
+    "WalkingToIdle": {
+      "Scale": 0.9988985642022357,
+      "OffsetX": 8.183891221428692e-06,
+      "OffsetY": 0.0,
+      "LeftOffsetX": 4.9575435875581775e-05,
+      "PivotX": 0.5,
+      "PivotY": 0.9010416666666666
+    }
+  }
+}

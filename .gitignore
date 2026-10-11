@@ -1,0 +1,31 @@
+tools/
+local-data/
+lib/
+**/bin/
+**/obj/
+**/__pycache__/
+*.pyc
+*.user
+*.suo
+dsh-pet/
+output/
+verification/
+animation/*.mov
+animation/*.MOV
+
+# Source-only GitHub snapshot: original movies, machine state and old releases stay local.
+animation/
+**/.git/
+pet-release.json
+*.tmp
+*.log
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+
+# Downloaded runtime dependencies are installed locally.
+runtime/*.exe
+runtime/*.zip
+runtime/*.sha256

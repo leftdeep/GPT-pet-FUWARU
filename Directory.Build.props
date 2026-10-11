@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- One version source for builds, publishing, launcher and runtime UI. -->
+    <PetReleaseVersion>0.52</PetReleaseVersion>
+    <Version>$(PetReleaseVersion).0</Version>
+    <AssemblyVersion>$(PetReleaseVersion).0.0</AssemblyVersion>
+    <FileVersion>$(PetReleaseVersion).0.0</FileVersion>
+    <InformationalVersion>$(PetReleaseVersion)</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+</Project>

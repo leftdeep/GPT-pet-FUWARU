@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>GptSpritePet</AssemblyName>
+    <Product>Fuwaru</Product>
+    <Title>芙哇噜</Title>
+    <RootNamespace>GptSpritePet</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Description>芙哇噜：透明动画、账号用量与成长系统</Description>
+    <!-- WPF owns DPI awareness through the manifest; WinForms supplies only the tray icon. -->
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../GptSpritePet.Core/GptSpritePet.Core.csproj" />
+  </ItemGroup>
+</Project>

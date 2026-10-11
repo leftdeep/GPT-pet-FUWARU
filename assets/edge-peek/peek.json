@@ -1,0 +1,19 @@
+{
+  "Atlas": "peek-atlas.png",
+  "Frames": {
+    "Left": "peek-left-v5.png",
+    "Right": "peek-right-v3.png"
+  },
+  "HeadHeights": {
+    "Left": 566,
+    "Right": 510,
+    "Top": 270,
+    "Bottom": 280
+  },
+  "Regions": {
+    "Left": [72, 55, 485, 600],
+    "Right": [690, 55, 535, 600],
+    "Top": [45, 660, 567, 560],
+    "Bottom": [619, 775, 625, 420]
+  }
+}

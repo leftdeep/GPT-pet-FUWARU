@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>GptSpritePet.NativeTests</AssemblyName>
+    <RootNamespace>GptSpritePet</RootNamespace>
+    <DefineConstants>$(DefineConstants);NATIVE_CHECKS</DefineConstants>
+    <ApplicationManifest>../../src/GptSpritePet/app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Compile the same UI sources, with test-only partials in this project. -->
+    <Compile Include="../../src/GptSpritePet/*.cs" Link="App/%(Filename)%(Extension)" />
+    <Page Include="../../src/GptSpritePet/PetTheme.xaml" Link="PetTheme.xaml" />
+    <ProjectReference Include="../../src/GptSpritePet.Core/GptSpritePet.Core.csproj" />
+  </ItemGroup>
+</Project>

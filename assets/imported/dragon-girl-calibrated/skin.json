@@ -1,0 +1,238 @@
+{
+  "Name": "龙娘 · 色调与锚点校准",
+  "DisplayScale": 0.9,
+  "Clips": {
+    "Idle": {
+      "Video": "idle-086edc84406ce874.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 143,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "普通待机",
+      "PreviewGroup": "Idle"
+    },
+    "IdleLook": {
+      "Video": "idlelook-a2137646fed8caff.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 240,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "东张西望",
+      "PreviewGroup": "Idle"
+    },
+    "Happy": {
+      "Video": "happy-dc9257bf35fcdc2a.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 95,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "开心跳跃",
+      "PreviewGroup": "ClickInteraction",
+      "Alignment": {
+        "Scale": 1,
+        "OffsetX": 0,
+        "OffsetY": 0,
+        "PivotX": 0.5,
+        "PivotY": 0.9
+      }
+    },
+    "Shy": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 144,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "害羞",
+      "PreviewGroup": "ClickInteraction",
+      "Loop": false,
+      "Video": "shy-dcf3139dcfcf2a32.webm",
+      "Alignment": {
+        "Scale": 1,
+        "OffsetX": 0,
+        "OffsetY": 0,
+        "PivotX": 0.5,
+        "PivotY": 0.9
+      }
+    },
+    "WalkStart": {
+      "Video": "walkstart-e2aadca4cec7fdfe.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 59,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "转身提裙",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    },
+    "Walking": {
+      "Video": "walking-c5eff5378626ff29.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 29,
+      "FrameRate": 24,
+      "Loop": true,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "走路",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    },
+    "WalkEnd": {
+      "Video": "walkend-9dc0c88bd4a75042.webm",
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 55,
+      "FrameRate": 24,
+      "Loop": false,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "收步放裙",
+      "PreviewGroup": "Walking",
+      "Alignment": {
+        "Scale": 0.9905130174158663,
+        "OffsetX": -0.010129669794380519,
+        "OffsetY": 0.0,
+        "LeftOffsetX": -0.002128905271686158,
+        "PivotX": 0.5,
+        "PivotY": 0.9010416666666666
+      }
+    },
+    "Drowsy": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 240,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "打瞌睡",
+      "PreviewGroup": "Idle",
+      "Loop": false,
+      "Video": "drowsy-645c27e72ac90ec4.webm"
+    },
+    "Sleeping": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 52,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "睡觉",
+      "PreviewGroup": "Idle",
+      "Loop": true,
+      "Video": "sleeping-11cf29952fa471a4.webm"
+    },
+    "LyingDown": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 72,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "躺下（衔接）",
+      "PreviewGroup": "Idle",
+      "Loop": false,
+      "Video": "lyingdown-087a21a306056a90.webm"
+    },
+    "Waking": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 116,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "起身（衔接）",
+      "PreviewGroup": "Idle",
+      "Loop": false,
+      "Video": "waking-ac630a2417c4548a.webm"
+    },
+    "Angry": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 240,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "生气",
+      "PreviewGroup": "ClickInteraction",
+      "Loop": false,
+      "Video": "angry-b4b2fa322b4e6e8a.webm"
+    },
+    "Curtsy": {
+      "VideoWidth": 640,
+      "VideoHeight": 640,
+      "VideoFrameCount": 143,
+      "FrameRate": 24,
+      "AnchorX": 0.5,
+      "AnchorY": 0.9,
+      "DisableProceduralMotion": true,
+      "DisplayName": "屈膝礼",
+      "PreviewGroup": "ClickInteraction",
+      "Loop": false,
+      "Video": "curtsy-900556bd6908508c.webm"
+    }
+  },
+  "StandingHeightRatio": 0.5442708333333334,
+  "WalkingSequence": {
+    "EndMoveFrames": 16,
+    "SpeedAt240": 55
+  },
+  "Transitions": {
+    "DurationSeconds": 0.2,
+    "IdleEntryFrame": 9,
+    "IdleToWalking": {
+      "Scale": 0.9989477602514454,
+      "OffsetX": -9.844138537502547e-05,
+      "OffsetY": 0.0,
+      "LeftOffsetX": -0.0010227035053995543,
+      "PivotX": 0.5,
+      "PivotY": 0.9010416666666666
+    },
+    "WalkingToIdle": {
+      "Scale": 0.9988985642022357,
+      "OffsetX": 8.183891221428692e-06,
+      "OffsetY": 0.0,
+      "LeftOffsetX": 4.9575435875581775e-05,
+      "PivotX": 0.5,
+      "PivotY": 0.9010416666666666
+    }
+  }
+}
