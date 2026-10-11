@@ -23,7 +23,6 @@ public sealed partial class PetWindow
     {
         using var presentation = _sprite.HoldPlacementPresentation();
         StopPreview();
-        var oldRect = _handle == IntPtr.Zero ? default : NativeDesktop.WindowRect(_handle);
         var oldCharacter = _handle == IntPtr.Zero ? default : CharacterScreenBounds();
         var oldArea = _handle == IntPtr.Zero ? default : CharacterWorkArea();
         var oldSkin = _settings.SkinDirectory;
@@ -37,11 +36,14 @@ public sealed partial class PetWindow
         if (_handle != IntPtr.Zero)
         {
             UpdateLayout();
-            var current = NativeDesktop.WindowRect(_handle);
             if (_peekEdge != ScreenEdge.None)
                 AttachPeek(oldArea, oldCharacter.X + oldCharacter.Width / 2, oldCharacter.Y + oldCharacter.Height / 2);
-            else MoveClamped(oldRect.X + (oldRect.Width - current.Width) / 2, oldRect.Bottom - current.Height,
-                CharacterWorkArea(oldRect.X, oldRect.Y));
+            else
+            {
+                var local = LocalCharacterBounds();
+                MoveClamped(oldCharacter.X + oldCharacter.Width / 2 - local.X - local.Width / 2,
+                    oldCharacter.Bottom - local.Bottom, oldArea);
+            }
         }
         if (!_settings.AutoWalk && _behavior.State == PetState.Walking) _behavior.Wake();
         UpdateTimer(); ScheduleSave();
@@ -52,9 +54,13 @@ public sealed partial class PetWindow
     internal void HidePet() { SaveNow(); Hide(); }
     internal void RestoreFromTray()
     {
+        var preservePosition = _handle != IntPtr.Zero && !NativeDesktop.IsIconic(_handle);
+        var position = preservePosition ? NativeDesktop.WindowRect(_handle) : default;
         if (_settings.ClickThrough) { _settings = _settings with { ClickThrough = false }; NativeDesktop.ApplyStyles(_handle, false); }
         WindowState = WindowState.Normal;
         Show(); NativeDesktop.ShowWithoutActivation(_handle);
+        // Showing a hidden layered WPF window can replay its managed Left/Top.
+        if (preservePosition) NativeDesktop.Move(_handle, position.X, position.Y);
         _topmostGuard?.Synchronize(); _topmostGuard?.RequestRestore();
         ClampCurrent(); _behavior.Wake(); UpdateTimer(); ScheduleSave();
     }

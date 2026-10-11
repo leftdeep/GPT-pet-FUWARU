@@ -18,6 +18,7 @@ public sealed class PetApplication : Application
     private SettingsStore? _store;
     public static bool SmokeTest { get; private set; }
     public static bool MenuSmokeTest { get; private set; }
+    public static bool BubbleBoundaryTest { get; private set; }
     public static bool StartWithSettings { get; private set; }
     public static bool StartWithUsage { get; private set; }
     public static bool StartWithGrowth { get; private set; }
@@ -37,8 +38,9 @@ public sealed class PetApplication : Application
 #if NATIVE_CHECKS
             else if (args[i] == "--smoke-test") SmokeTest = true;
             else if (args[i] == "--menu-smoke-test") { SmokeTest = true; MenuSmokeTest = true; }
+            else if (args[i] == "--bubble-boundary-test") { SmokeTest = true; BubbleBoundaryTest = true; }
 #else
-            else if (args[i] is "--smoke-test" or "--menu-smoke-test")
+            else if (args[i] is "--smoke-test" or "--menu-smoke-test" or "--bubble-boundary-test")
                 throw new ArgumentException("原生检查请使用 tests/GptSpritePet.NativeTests 测试程序。");
 #endif
             else if (args[i] == "--settings") StartWithSettings = true;

@@ -21,7 +21,7 @@ public sealed partial class PetWindow
 {
     private void ApplyView()
     {
-        _usageHeadTop = null;
+        _usageHeadTop = _usageFootBottom = null;
         var showUsage = _settings.UsageCardVisible;
         // Reserve transparent space so revealing the card never moves the character or its feet.
         var spriteTop = showUsage ? 200 * _settings.UsageBubbleScale : 82;
@@ -46,7 +46,14 @@ public sealed partial class PetWindow
         _sprite.PeekSize = _settings.Size * .4;
         var spriteSize = _peekEdge == ScreenEdge.None ? _sprite.ViewportSizeAt(_settings.Size) : _sprite.PeekViewportSize;
         var cardWidth = UsageBubbleBaseWidth * _settings.UsageBubbleScale;
-        Width = Math.Max(spriteSize + 40, cardWidth + 40); Height = spriteSize + spriteTop + 22;
+        // A character can touch an edge while the transparent window extends offscreen.
+        // Reserve both horizontal directions and space below before positioning the window.
+        Width = Math.Max(spriteSize + 40, showUsage ? cardWidth * 2 + 40 : spriteSize + 40);
+        // Calibrated clips can draw their feet below the nominal square viewport.
+        // Estimate the new extent from the current pose and leave room for cold decoding.
+        var spriteBottom = Math.Max(spriteSize * 1.25,
+            _sprite.ActualHeight > 0 ? _sprite.VisibleBounds.Bottom * spriteSize / _sprite.ActualHeight : spriteSize);
+        Height = spriteTop + (showUsage ? spriteBottom + 224 * _settings.UsageBubbleScale + 40 : spriteSize + 22);
         _sprite.Width = spriteSize; _sprite.Height = spriteSize;
         Canvas.SetLeft(_sprite, (Width - spriteSize) / 2); Canvas.SetTop(_sprite, spriteTop);
         if (_peekEdge != ScreenEdge.None)
@@ -83,9 +90,11 @@ public sealed partial class PetWindow
     private void PositionHeadBubbles()
     {
         var headTop = Canvas.GetTop(_sprite) + _sprite.VisibleTop;
+        var footBottom = Canvas.GetTop(_sprite) + _sprite.VisibleBounds.Bottom;
         // Hold the reading anchor while open; breathing and individual sprite frames
         // can move the character's visible crown without moving the quota card.
-        if (_usageHoverVisible && _peekEdge == ScreenEdge.None) _usageHeadTop ??= headTop;
+        if (_usageHoverVisible && _peekEdge == ScreenEdge.None)
+        { _usageHeadTop ??= headTop; _usageFootBottom ??= footBottom; }
         var rect = _handle == IntPtr.Zero ? default : NativeDesktop.WindowRect(_handle);
         var area = _handle == IntPtr.Zero ? default : CharacterWorkArea(rect.X, rect.Y);
         var dpi = DpiScale;
@@ -104,15 +113,15 @@ public sealed partial class PetWindow
             }
             if (_handle != IntPtr.Zero)
             {
-                var minX = (area.X - rect.X) / dpi + 6;
-                var maxX = (area.Right - rect.X) / dpi - width - 6;
-                var minY = (area.Y - rect.Y) / dpi + 6;
-                var maxY = (area.Bottom - rect.Y) / dpi - height - 6;
-                if (_peekEdge != ScreenEdge.None)
-                {
-                    minX = Math.Max(6, minX); maxX = Math.Min(Width - width - 6, maxX);
-                    minY = Math.Max(6, minY); maxY = Math.Min(Height - height - 6, maxY);
-                }
+                // Intersect physical work-area bounds (converted to DIP) with the
+                // parent window's client area in every mode, including normal poses.
+                const double margin = 20; // Include the border and drop shadow.
+                var minX = Math.Max(margin, (area.X - rect.X) / dpi + margin);
+                var maxX = Math.Min(Width - width - margin, (area.Right - rect.X) / dpi - width - margin);
+                var minY = Math.Max(margin, (area.Y - rect.Y) / dpi + margin);
+                var maxY = Math.Min(Height - height - margin, (area.Bottom - rect.Y) / dpi - height - margin);
+                if (_peekEdge == ScreenEdge.None && top < minY)
+                    top = (_usageFootBottom ?? footBottom) + 12;
                 left = Math.Clamp(left, minX, Math.Max(minX, maxX));
                 top = Math.Clamp(top, minY, Math.Max(minY, maxY));
             }

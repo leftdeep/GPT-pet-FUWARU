@@ -45,6 +45,7 @@ public sealed partial class PetWindow : Window
     private readonly DispatcherTimer _hoverTimer;
     private bool _usageHoverVisible;
     private double? _usageHeadTop;
+    private double? _usageFootBottom;
     private double _lastUsageHover = double.NegativeInfinity;
     private readonly Stopwatch _clock = Stopwatch.StartNew();
     private double _lastTick, _lastMotionSave;
@@ -156,7 +157,7 @@ public sealed partial class PetWindow : Window
             BorderThickness = new Thickness(1), Cursor = Cursors.Hand, Visibility = Visibility.Hidden };
         _usageBadge.MouseLeftButtonUp += (_, e) => { OpenUsage(); e.Handled = true; };
         _canvas.Children.Add(_usageBadge); Canvas.SetLeft(_usageBadge, 12); Canvas.SetTop(_usageBadge, 12);
-        _sprite.SizeChanged += (_, _) => { _usageHeadTop = null; PositionHeadBubbles(); };
+        _sprite.SizeChanged += (_, _) => { _usageHeadTop = _usageFootBottom = null; PositionHeadBubbles(); };
         _usageBadge.SizeChanged += (_, _) => PositionHeadBubbles();
         _usageService = new AccountUsageService(_store.DirectoryPath);
         _usageService.TokenObserved += usage =>
@@ -240,7 +241,7 @@ public sealed partial class PetWindow : Window
         if (PetApplication.SmokeTest)
         {
             var smokeTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-            smokeTimer.Tick += (_, _) => { smokeTimer.Stop(); if (PetApplication.MenuSmokeTest) RunMenuSmokeTest(); else RunSmokeTest(); };
+            smokeTimer.Tick += (_, _) => { smokeTimer.Stop(); if (PetApplication.BubbleBoundaryTest) RunBubbleBoundaryTest(); else if (PetApplication.MenuSmokeTest) RunMenuSmokeTest(); else RunSmokeTest(); };
             smokeTimer.Start();
         }
 #endif

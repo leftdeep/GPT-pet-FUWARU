@@ -8,6 +8,6 @@
 - `test_pet_video_converter.py` / `test_standing_normalization.py`：视频转换器检查。
 - `test_pet_action_import.py` / `test_pet_color.py` / `test_pet_anchor.py`：固定导入、校色、头部/双脚校准，以及已确认成品原字节安装、缓存处理模式区分和错误审核的原子拒绝。
 
-正式程序不提供原生检查入口。测试宿主有 `--smoke-test` 与 `--menu-smoke-test`，必须使用独立 `--data-dir`；日常使用优先采用脚本中准备好的隔离目录。
+正式程序不提供原生检查入口。测试宿主有 `--smoke-test`、`--menu-smoke-test` 与 `--bubble-boundary-test`，必须使用独立 `--data-dir`；日常使用优先采用脚本中准备好的隔离目录。气泡边界检查覆盖小角色、大气泡的四边与四角、贴边探头、角色位置保持及恢复显示，见 [0.53 修复说明](../docs/bubble-boundary-fix.md)。
 
 - `test_pet_calibration.py`：新透明 MOV 自动校色与头部/双脚校准、完整预览、分段共同标定、跳跃及特效保留、参考/人工标注哈希、缓存和不可靠站姿的原子拒绝。

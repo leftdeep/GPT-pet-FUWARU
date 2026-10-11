@@ -26,6 +26,7 @@ public sealed partial class PetWindow
         RunMenuDismissChecks(checks);
         RunStructureChecks(checks);
         RunEdgePeekChecks(checks);
+        RunBubbleBoundaryChecks(checks);
         RunTopmostChecks(checks);
         _tick.Stop();
         _behavior.Wake(); _sprite.State = PetState.Idle; _sprite.ResetAnimation();

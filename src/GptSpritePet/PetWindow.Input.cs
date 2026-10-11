@@ -43,7 +43,7 @@ public sealed partial class PetWindow
     {
         if (_usageHoverVisible == visible) return;
         _usageHoverVisible = visible;
-        _usageHeadTop = null;
+        _usageHeadTop = _usageFootBottom = null;
         _usageBadge.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         if (visible)
         {

@@ -7,6 +7,7 @@ on:
       - '.github/workflows/portable-release.yml'
       - 'scripts/package-portable.ps1'
       - 'scripts/build-slim-decoder.sh'
+      - 'Directory.Build.props'
 permissions:
   contents: write
 concurrency:
@@ -72,6 +73,7 @@ jobs:
           $notes = "$env:RUNNER_TEMP/fuwaru-package/release-notes.md"
           @'
           下载 FUWARU-*-windows-x64.zip，解压整个文件夹后双击“启动芙哇噜.cmd”。
+          0.53 修复靠近屏幕四边与四角时用量气泡被裁切的问题；顶部空间不足时显示在角色下方，并保持调整设置与恢复显示时的角色位置。
           包含 .NET 运行环境、精简透明视频解码器和现用全部 9 个动作，无需编译，首次启动也无需下载依赖。
           适用于 Windows 10/11 x64。请勿下载下面的 Source code ZIP 作为运行程序。
           解码器对应源码、许可证与可重建脚本单独提供在 FUWARU-decoder-source.zip 中，普通用户无需下载。

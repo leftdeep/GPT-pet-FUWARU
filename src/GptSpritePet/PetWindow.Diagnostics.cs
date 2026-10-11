@@ -22,6 +22,9 @@ public sealed partial class PetWindow
     internal void WriteRuntimeStatus()
     {
         var rect = NativeDesktop.WindowRect(_handle);
+        var bubbleFirst = _usageBadge.PointToScreen(new Point());
+        var bubbleLast = _usageBadge.PointToScreen(new Point(_usageBadge.ActualWidth, _usageBadge.ActualHeight));
+        var bubbleArea = CharacterWorkArea();
         var hoverPoint = _sprite.PointToScreen(FindOpaquePoint(_sprite) ?? new Point(_sprite.ActualWidth / 2, _sprite.ActualHeight / 2));
         var status = new
         {
@@ -43,6 +46,12 @@ public sealed partial class PetWindow
             automaticAnimationTimerRunning = _tick.IsEnabled,
             previewAction = _sprite.PreviewKey,
             characterBounds = CharacterScreenBounds(),
+            usageBubble = new { visible = _usageBadge.IsVisible, scale = _settings.UsageBubbleScale,
+                first = bubbleFirst, last = bubbleLast,
+                fitsWorkArea = bubbleFirst.X >= bubbleArea.X - 1 && bubbleFirst.Y >= bubbleArea.Y - 1
+                    && bubbleLast.X <= bubbleArea.Right + 1 && bubbleLast.Y <= bubbleArea.Bottom + 1,
+                fitsWindow = bubbleFirst.X >= rect.X - 1 && bubbleFirst.Y >= rect.Y - 1
+                    && bubbleLast.X <= rect.Right + 1 && bubbleLast.Y <= rect.Bottom + 1 },
             configuredSize = _settings.Size,
             peekHeadHeight = _peekEdge == ScreenEdge.None ? (double?)null : _sprite.PeekHeadHeight,
             idleFrames = _sprite.FrameCount(PetState.Idle),
