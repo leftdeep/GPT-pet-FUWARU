@@ -10,17 +10,19 @@ internal static class WebmChecks
         var root = Directory.GetCurrentDirectory();
         while (!File.Exists(Path.Combine(root, "build.ps1")))
             root = Directory.GetParent(root)?.FullName ?? throw new IOException("Run tests inside the project.");
-        var skin = Path.Combine(root, "assets", "dragon-girl-0.40");
+        var skin = Path.Combine(root, "assets", "imported", "dragon-girl-calibrated");
         var definition = SkinDefinition.Load(skin);
         check(definition.Clips.Values.All(c => c.Video is not null), "all built-in actions use WebM assets");
         var standingClips = definition.Clips.Where(pair => new[] { "Idle", "IdleLook", "Happy" }.Contains(pair.Key)).ToArray();
-        check(standingClips.Length == 3, "retained built-in skin includes the three standing actions");
-        check(definition.Clips["Idle"].DisplayName == "普通待机" && definition.Clips["IdleLook"].DisplayName == "待机张望"
+        check(standingClips.Length == 3, "current default skin includes the three standing actions");
+        check(definition.Clips.Count == 13 && definition.Clips.Values.All(c => c.VideoWidth == 640 && c.VideoHeight == 640),
+            "default skin uses only the 13 current 640 video segments");
+        check(definition.Clips["Idle"].DisplayName == "普通待机" && definition.Clips["IdleLook"].DisplayName == "东张西望"
             && definition.Clips["Happy"].DisplayName == "开心跳跃", "retained action labels match source videos");
         check(definition.Clips["Idle"].PreviewGroup == AnimationPreviewGroup.Idle
             && definition.Clips["IdleLook"].PreviewGroup == AnimationPreviewGroup.Idle
             && definition.Clips["Happy"].PreviewGroup == AnimationPreviewGroup.ClickInteraction, "retained action preview grouping");
-        check(definition.Clips["Idle"].FrameCount == 143 && definition.Clips["IdleLook"].FrameCount == 241
+        check(definition.Clips["Idle"].FrameCount == 143 && definition.Clips["IdleLook"].FrameCount == 240
             && definition.Clips["Happy"].FrameCount == 95 && !definition.Clips["Happy"].Loop, "retained source frame counts and one-shot jump preserved");
         check(definition.StandingHeightRatio == 209d / 384, "built-in skin provides the shared clean-standing calibration");
         var cache = Path.Combine(Path.GetTempPath(), "GptSpritePet-webm-tests-" + Guid.NewGuid().ToString("N"));
@@ -59,8 +61,9 @@ internal static class WebmChecks
                 check(frames.CachedBytes <= WebmFrameStore.BufferFrames * frames.Width * frames.Height * 4L,
                     name + " decoder retains only bounded frames");
             }
-            check(standingHeights.Max() - standingHeights.Min() <= 2, "all three standing characters have equal decoded height within two pixels");
-            check(groundLines.Max() - groundLines.Min() <= 2, "all three standing characters share the same decoded ground line");
+            var calibrationTolerance = (int)Math.Ceiling(2d * definition.Clips["Idle"].VideoHeight / 384);
+            check(standingHeights.Max() - standingHeights.Min() <= calibrationTolerance, "all three standing characters retain the proportional height tolerance");
+            check(groundLines.Max() - groundLines.Min() <= calibrationTolerance, "all three standing characters share the same decoded ground line");
             var invalid = new AnimationClip { Video = "idle.webm", VideoWidth = 384, VideoHeight = 384,
                 VideoFrameCount = 300, FrameRate = 24 };
             void Manifest(AnimationClip clip) => File.WriteAllText(Path.Combine(cache, "skin.json"),

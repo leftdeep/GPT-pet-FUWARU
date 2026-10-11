@@ -52,7 +52,7 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     results = []
-    for folder in ['assets/dragon-girl-0.40', 'assets/imported/dragon-girl-calibrated']:
+    for folder in ['assets/imported/dragon-girl-calibrated']:
         directory = root / folder
         manifest = json.loads((directory / 'skin.json').read_text(encoding='utf-8-sig'))
         for action, clip in manifest['Clips'].items():
@@ -67,13 +67,13 @@ def main():
                             'frames': clip['VideoFrameCount'], 'sha256': candidate[0],
                             'identical': True})
             print(f'{action}: {clip["VideoFrameCount"]} alpha frames identical', flush=True)
-    if len(results) != 19:
-        raise AssertionError('Expected all 13 active segments and 6 fallback segments')
+    if len(results) != 13:
+        raise AssertionError('Expected all 13 active segments; legacy fallback assets have been retired')
     report = {'passed': True, 'videos': len(results), 'results': results}
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
-    print('All 19 videos preserve every decoded pixel.')
+    print('All 13 current videos preserve every decoded pixel.')
 
 
 if __name__ == '__main__':

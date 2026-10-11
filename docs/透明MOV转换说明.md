@@ -18,7 +18,7 @@ python scripts/import-alpha-video.py "C:\素材\开心.mov" --output "assets/con
 
 输出包含 skin.json、WebM 和 conversion.json；后者记录源文件哈希、裁切、编码参数及透明验证。重复转换会保留旧 WebM，请确认新动作后按清单引用清理未使用文件。
 
-`assets` 下的内置 `dragon-girl*` 素材包受保护，单视频转换器拒绝直接覆盖。批量流程保留 `assets/dragon-girl-0.40`，先复用其中审核 WebM，再在 `assets/imported/dragon-girl` 构建独立结果。旧的一次性重建脚本已清理，入口改为 `scripts/import-pet-actions.ps1`。
+`assets` 下的内置 `dragon-girl*` 素材包受保护，单视频转换器拒绝直接覆盖。批量流程以 `assets/dragon-girl-calibration-base` 为校准基准，在 `assets/imported/dragon-girl-calibrated` 构建现用结果；质量配方还引用 `assets/authoring-baselines` 中的冻结基准。旧 0.40 回退素材已移除，统一入口为 `scripts/import-pet-actions.ps1`。
 
 当前配置为既有源指定角色检测区域 `[280,0,720,720]`，排除角落标记。普通待机测量首尾各五帧；跳跃末尾残留爱心光点，明确使用开头五帧。全库使用 348.333 像素目标站立高度、576 像素脚底线。超界时停止，不自动单独缩小动作。张望沿用已审核 WebM；如需重建，应先在配置中补充实际存在的源文件。
 

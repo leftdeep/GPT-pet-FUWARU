@@ -14,7 +14,7 @@ foreach ($taskMode in @('smoke','menu')) {
     $taskData = Join-Path $taskRoot ("verification/$taskVersion/native-$taskMode")
     New-Item -ItemType Directory -Path $taskData -Force | Out-Null
     @{Size=240; X=600; Y=300; AutoWalk=$true; UsageEnabled=$false; UsageCardVisible=$true;
-        ResetMonitoringEnabled=$false; SkinDirectory=(Join-Path $taskRoot 'assets/dragon-girl-0.40')} |
+        ResetMonitoringEnabled=$false; SkinDirectory=(Join-Path $taskRoot 'assets/imported/dragon-girl-calibrated')} |
         ConvertTo-Json | Set-Content -LiteralPath (Join-Path $taskData 'settings.json') -Encoding UTF8
     $taskResultName = if ($taskMode -eq 'smoke') { 'smoke-test.json' } else { 'menu-test.json' }
     $taskResultFile = Join-Path $taskData $taskResultName

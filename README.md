@@ -19,7 +19,9 @@ Windows 透明动画桌宠，基于 C#、WPF 与 .NET 10。包含拖动、走路
 
 构建完成后双击 `启动芙哇噜.cmd`，首次启动默认使用 `assets/imported/dragon-girl-calibrated` 中现用全部 9 个动作：待机、走路、开心、害羞、生气、东张西望、困倦、睡觉、行礼。成品标准为 640×640、24 fps、VP9 Alpha、CRF 40；走路和睡觉分段后共 13 个视频。
 
-`assets/dragon-girl-0.40` 是启动程序与测试仍引用的默认回退素材；`assets/edge-peek` 保存贴边图片。个人设置与存档会在本机生成。
+默认角色和“恢复内置角色”统一使用现用 640 动作，旧 0.40 回退素材已移除。`assets/edge-peek` 保存贴边图片。个人设置与存档会在本机生成。
+
+本地开发项目的 `animation` 保留原始 MOV 与动作配方；`assets/dragon-girl-calibration-base`、`assets/authoring-baselines` 保留校准和重建基准，供后续新增动作使用。它们不加入播放菜单，也不随便携包发布。
 
 ## 检查
 

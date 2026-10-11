@@ -77,7 +77,7 @@ function Get-PetAssetReferences($Value) {
         }
     }
 }
-foreach ($taskSkin in @('assets/dragon-girl-0.40','assets/imported/dragon-girl-calibrated')) {
+foreach ($taskSkin in @('assets/imported/dragon-girl-calibrated')) {
     Copy-PetPackageFile ($taskSkin + '/skin.json')
     $taskManifest = Get-Content -LiteralPath (Join-Path $taskRoot ($taskSkin + '/skin.json')) -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($taskAsset in (Get-PetAssetReferences $taskManifest | Sort-Object -Unique)) {

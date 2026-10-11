@@ -29,3 +29,7 @@ pet-release.json
 runtime/*.exe
 runtime/*.zip
 runtime/*.sha256
+
+# Local animation authoring baselines are excluded from the source snapshot.
+assets/dragon-girl-calibration-base/
+assets/authoring-baselines/

@@ -12,7 +12,7 @@ $taskExe = Join-Path (Resolve-PetReleasePath $taskRoot $taskSelectedRelease) 'Gp
 $taskData = Join-Path $taskRoot 'local-data'
 $taskSkin = Join-Path $taskRoot 'assets\imported\dragon-girl-calibrated'
 if (!(Test-Path -LiteralPath (Join-Path $taskSkin 'skin.json'))) {
-    $taskSkin = Join-Path $taskRoot 'assets\dragon-girl-0.40'
+    throw '缺少现用动作素材，请恢复 assets/imported/dragon-girl-calibrated 或重新下载完整便携包。'
 }
 if (!(Test-Path -LiteralPath $taskExe)) { throw '找不到程序。请先运行 build.ps1 -Publish。' }
 $taskArgs = @('--data-dir', ('"' + $taskData + '"'))
@@ -40,7 +40,7 @@ if (!(Test-Path -LiteralPath $taskSettingsFile)) {
 }
 else {
     $taskSavedSettings = Get-Content -LiteralPath $taskSettingsFile -Raw -Encoding utf8 | ConvertFrom-Json
-    $taskOldDefaults = @((Join-Path $taskRoot 'assets\dragon-girl'), (Join-Path $taskRoot 'assets\dragon-girl-0.31'), (Join-Path $taskRoot 'assets\dragon-girl-0.32'), (Join-Path $taskRoot 'assets\dragon-girl-0.36'))
+    $taskOldDefaults = @((Join-Path $taskRoot 'assets\dragon-girl'), (Join-Path $taskRoot 'assets\dragon-girl-0.31'), (Join-Path $taskRoot 'assets\dragon-girl-0.32'), (Join-Path $taskRoot 'assets\dragon-girl-0.36'), (Join-Path $taskRoot 'assets\dragon-girl-0.40'))
     if ($taskSavedSettings.SkinDirectory -and
         [IO.Path]::GetFullPath($taskSavedSettings.SkinDirectory) -in $taskOldDefaults) {
         $taskSavedSettings.SkinDirectory = $taskSkin

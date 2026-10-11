@@ -9,7 +9,7 @@ internal static class ProjectPaths
     internal static string Version => typeof(ProjectPaths).Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "未知";
     internal static string Root { get; } = FindRoot();
-    internal static string DefaultSkin => Path.Combine(Root, "assets", "dragon-girl-0.40");
+    internal static string DefaultSkin => Path.Combine(Root, "assets", "imported", "dragon-girl-calibrated");
     internal static string Decoder => Path.Combine(Root, "runtime", "ffmpeg.exe");
 
     private static string FindRoot()

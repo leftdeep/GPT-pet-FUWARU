@@ -22,14 +22,14 @@ internal static class AnimationTransitionChecks
         check(rejected, "reject mismatched transition surfaces");
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (root is not null && !File.Exists(Path.Combine(root.FullName, "build.ps1"))) root = root.Parent;
-        var skinPath = Path.Combine(root!.FullName, "assets", "dragon-girl-0.40");
+        var skinPath = Path.Combine(root!.FullName, "assets", "imported", "dragon-girl-calibrated");
         var skin = SkinDefinition.Load(skinPath);
-        check(skin.Name == "芙哇噜 · Fuwaru" && skin.Clips["Idle"].FrameCount == 143
+        check(skin.Name == "龙娘 · 色调与锚点校准" && skin.Clips["Idle"].FrameCount == 143
             && skin.Clips["Idle"].DisplayName == "普通待机", "selected idle animation retains asset with simplified label");
         check(skin.Transitions is { DurationSeconds: .2, IdleEntryFrame: 9 }
             && skin.Clips["WalkStart"].Alignment?.Scale == skin.Clips["Walking"].Alignment?.Scale
             && skin.Clips["WalkEnd"].Alignment?.OffsetX == skin.Clips["Walking"].Alignment?.OffsetX,
-            "0.40 shares fixed walk calibration and the reviewed 0.20-second transition");
+            "current skin retains fixed walk calibration and the reviewed 0.20-second transition");
         var directory = Path.Combine(Path.GetTempPath(), "GptSpritePet-transitions-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
         try
