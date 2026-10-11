@@ -4,6 +4,10 @@ Windows 透明动画桌宠，基于 C#、WPF 与 .NET 10。包含拖动、走路
 
 ## 构建与启动
 
+普通用户请下载 [Releases 中的 Windows 便携版](https://github.com/leftdeep/GPT-pet-FUWARU/releases/latest) `FUWARU-*-windows-x64.zip`，解压整个文件夹后双击 `启动芙哇噜.cmd`。包内已含 .NET 运行环境和现用 9 个动作；首次启动需要联网，自动下载并校验 FFmpeg 视频解码器。不要把 GitHub 的 **Code → Download ZIP** 或 **Source code (zip)** 当作运行程序，它们是需要自行编译的源码。
+
+以下步骤用于开发者从源码构建：
+
 需要 Windows 10/11 x64、.NET 10 SDK 和 .NET 10 Windows Desktop Runtime。在项目根目录使用 PowerShell 执行：
 
 ```powershell
@@ -13,7 +17,7 @@ Windows 透明动画桌宠，基于 C#、WPF 与 .NET 10。包含拖动、走路
 
 依赖脚本会检查已有的 `runtime/ffmpeg.exe`；缺少时，从 [FFmpeg 官方下载页](https://ffmpeg.org/download.html)列出的 [gyan.dev Windows builds](https://www.gyan.dev/ffmpeg/builds/)下载 essentials ZIP，验证 SHA-256 后安装。FFmpeg 由用户在本机获取，仓库不附其二进制。
 
-构建完成后双击 `启动芙哇噜.cmd`。通过人物右键菜单或托盘菜单进入设置，选择 `assets/imported/dragon-girl-calibrated` 使用现用全部 9 个动作：待机、走路、开心、害羞、生气、东张西望、困倦、睡觉、行礼。成品标准为 640×640、24 fps、VP9 Alpha、CRF 40；走路和睡觉分段后共 13 个视频。
+构建完成后双击 `启动芙哇噜.cmd`，首次启动默认使用 `assets/imported/dragon-girl-calibrated` 中现用全部 9 个动作：待机、走路、开心、害羞、生气、东张西望、困倦、睡觉、行礼。成品标准为 640×640、24 fps、VP9 Alpha、CRF 40；走路和睡觉分段后共 13 个视频。
 
 `assets/dragon-girl-0.40` 是启动程序与测试仍引用的默认回退素材；`assets/edge-peek` 保存贴边图片。个人设置与存档会在本机生成。
 

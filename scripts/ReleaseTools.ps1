@@ -23,6 +23,9 @@ function Get-PetRelease([string]$Root) {
         if (!(Test-Path -LiteralPath (Join-Path $petPath 'GptSpritePet.exe'))) { throw '当前发布程序缺失，请重新发布。' }
         return $petRelease
     }
+    if (!(Test-Path -LiteralPath (Join-Path $Root 'lib') -PathType Container)) {
+        throw '这是源码包，尚未构建程序。请下载 https://github.com/leftdeep/GPT-pet-FUWARU/releases/latest 中的 FUWARU Windows 便携包，或运行 build.ps1 -Publish。'
+    }
     $petLegacy = Get-ChildItem -LiteralPath (Join-Path $Root 'lib') -Directory |
         Where-Object { $_.Name -match '^\d+\.\d+$' -and (Test-Path -LiteralPath (Join-Path $_.FullName 'GptSpritePet.exe')) } |
         Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
@@ -49,7 +52,10 @@ function Set-PetRelease([string]$Root, [string]$RelativePath, [string]$Version) 
     $petPrevious = if (Test-Path -LiteralPath $petPointer) { (Get-PetRelease $Root).Current } else {
         try { (Get-PetRelease $Root).Current } catch { $null }
     }
-    if ($petPrevious -eq $RelativePath) { return }
+    if ($petPrevious -eq $RelativePath) {
+        if (Test-Path -LiteralPath $petPointer) { return }
+        $petPrevious = $null
+    }
     $petNewPointer = $petPointer + '.' + [guid]::NewGuid().ToString('N') + '.tmp'
     try {
         @{Version=$Version; Current=$RelativePath; Previous=$petPrevious; PublishedAt=[DateTimeOffset]::Now.ToString('O')} |

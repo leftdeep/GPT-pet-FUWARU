@@ -21,6 +21,9 @@ function New-TestRelease([string]$Name, [string]$Version) {
 try {
     $legacy = New-TestRelease '0.41' '0.41'
     Assert-Pet ((Get-PetRelease $fixtureRoot).Current -eq 'lib/0.41') 'Legacy release discovery failed.'
+    Set-PetRelease $fixtureRoot 'lib/0.41' '0.41'
+    Assert-Pet (Test-Path -LiteralPath (Join-Path $fixtureRoot 'pet-release.json')) 'Initial portable release did not create its pointer.'
+    Assert-Pet ($null -eq (Get-PetRelease $fixtureRoot).Previous) 'Initial release points to itself as previous.'
     $current = New-TestRelease '0.42-fixture' '0.42'
     Set-PetRelease $fixtureRoot 'lib/0.42-fixture' '0.42'
     $pointer = Join-Path $fixtureRoot 'pet-release.json'

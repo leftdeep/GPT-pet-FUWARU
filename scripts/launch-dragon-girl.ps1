@@ -10,12 +10,21 @@ if ($Previous -and !$Quit) {
 }
 $taskExe = Join-Path (Resolve-PetReleasePath $taskRoot $taskSelectedRelease) 'GptSpritePet.exe' 
 $taskData = Join-Path $taskRoot 'local-data'
-$taskSkin = Join-Path $taskRoot 'assets\dragon-girl-0.40'
+$taskSkin = Join-Path $taskRoot 'assets\imported\dragon-girl-calibrated'
+if (!(Test-Path -LiteralPath (Join-Path $taskSkin 'skin.json'))) {
+    $taskSkin = Join-Path $taskRoot 'assets\dragon-girl-0.40'
+}
 if (!(Test-Path -LiteralPath $taskExe)) { throw '找不到程序。请先运行 build.ps1 -Publish。' }
 $taskArgs = @('--data-dir', ('"' + $taskData + '"'))
 if ($Quit) {
     Start-Process -FilePath $taskExe -ArgumentList ($taskArgs + '--quit') -WindowStyle Hidden -Wait
     return
+}
+$taskDecoder = Join-Path $taskRoot 'runtime\ffmpeg.exe'
+if (!(Test-Path -LiteralPath $taskDecoder)) {
+    $taskDependencySetup = Join-Path $PSScriptRoot 'setup-runtime.ps1'
+    if (!(Test-Path -LiteralPath $taskDependencySetup)) { throw '缺少视频解码器。请重新下载完整便携包。' }
+    & $taskDependencySetup
 }
 New-Item -ItemType Directory -Path $taskData -Force | Out-Null
 $taskSettingsFile = Join-Path $taskData 'settings.json'
