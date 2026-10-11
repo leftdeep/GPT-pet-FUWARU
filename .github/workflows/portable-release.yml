@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/portable-release.yml'
       - 'scripts/package-portable.ps1'
+      - 'scripts/build-slim-decoder.sh'
 permissions:
   contents: write
 concurrency:
@@ -14,6 +15,7 @@ concurrency:
 jobs:
   package:
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6
@@ -21,13 +23,44 @@ jobs:
           dotnet-version: '10.0.x'
       - name: Prepare video decoder for checks
         shell: pwsh
-        run: ./scripts/setup-runtime.ps1
+        run: |
+          ./scripts/setup-runtime.ps1
+          New-Item -ItemType Directory -Path ./output -Force | Out-Null
+          Copy-Item -LiteralPath ./runtime/ffmpeg.exe -Destination ./output/full-ffmpeg.exe
+          "FUWARU_TEST_ENCODER=$env:GITHUB_WORKSPACE/output/full-ffmpeg.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            diffutils
+            perl
+            gnupg
+            curl
+            tar
+            zip
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-nasm
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-python
+      - name: Build small alpha WebM decoder
+        shell: msys2 {0}
+        run: bash ./scripts/build-slim-decoder.sh
+      - name: Use release decoder for playback checks
+        shell: pwsh
+        run: Copy-Item -LiteralPath ./output/slim-decoder/ffmpeg.exe -Destination ./runtime/ffmpeg.exe -Force
       - name: Build and check source
         shell: pwsh
         run: ./build.ps1
+      - name: Verify all animation pixels against full decoder
+        shell: pwsh
+        run: |
+          python ./tests/test_slim_decoder.py --decoder ./runtime/ffmpeg.exe --baseline ./output/full-ffmpeg.exe --report ./output/slim-decoder/animation-validation.json
+          if ($LASTEXITCODE -ne 0) { throw '精简解码器改变了动作画面。' }
       - name: Package Windows portable app
         shell: pwsh
-        run: ./scripts/package-portable.ps1 -OutputDirectory "$env:RUNNER_TEMP/fuwaru-package"
+        run: ./scripts/package-portable.ps1 -OutputDirectory "$env:RUNNER_TEMP/fuwaru-package" -DecoderDirectory "$env:GITHUB_WORKSPACE/output/slim-decoder"
       - name: Publish download
         shell: pwsh
         env:
@@ -39,8 +72,11 @@ jobs:
           $notes = "$env:RUNNER_TEMP/fuwaru-package/release-notes.md"
           @'
           下载 FUWARU-*-windows-x64.zip，解压整个文件夹后双击“启动芙哇噜.cmd”。
-          包含 .NET 运行环境和现用全部 9 个动作，无需编译。首次启动需联网，自动下载并校验 FFmpeg。
+          包含 .NET 运行环境、精简透明视频解码器和现用全部 9 个动作，无需编译，首次启动也无需下载依赖。
           适用于 Windows 10/11 x64。请勿下载下面的 Source code ZIP 作为运行程序。
+          解码器对应源码、许可证与可重建脚本单独提供在 FUWARU-decoder-source.zip 中，普通用户无需下载。
           '@ | Set-Content -LiteralPath $notes -Encoding utf8
-          gh release create $tag $package.Zip ($package.Zip + '.sha256') --target $env:GITHUB_SHA --title ('芙哇噜 ' + $package.Version + ' Windows 便携版') --notes-file $notes --latest
+          $source = "$env:GITHUB_WORKSPACE/output/slim-decoder/corresponding-source.zip"
+          Copy-Item -LiteralPath $source -Destination "$env:RUNNER_TEMP/fuwaru-package/FUWARU-decoder-source.zip"
+          gh release create $tag $package.Zip ($package.Zip + '.sha256') "$env:RUNNER_TEMP/fuwaru-package/FUWARU-decoder-source.zip" --target $env:GITHUB_SHA --title ('芙哇噜 ' + $package.Version + ' Windows 离线便携版') --notes-file $notes --latest
           if ($LASTEXITCODE -ne 0) { throw '发布下载失败。' }

@@ -1,4 +1,4 @@
-﻿param([string]$OutputDirectory)
+﻿param([string]$OutputDirectory, [string]$DecoderDirectory)
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path $PSScriptRoot -Parent
 . (Join-Path $PSScriptRoot 'ReleaseTools.ps1')
@@ -6,7 +6,14 @@ $taskVersion = Get-PetVersion $taskRoot
 if (!$OutputDirectory) { $OutputDirectory = Join-Path $taskRoot 'output/portable' }
 $taskOutput = [IO.Path]::GetFullPath($OutputDirectory)
 $taskName = 'FUWARU-' + $taskVersion + '-windows-x64'
-$taskPackage = Join-Path $taskOutput ($taskName + '-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$taskPackage = Join-Path $taskOutput $taskName
+if (Test-Path -LiteralPath $taskPackage) { throw '目标便携文件夹已存在，请选择新的输出目录。' }
+if (!$DecoderDirectory) { $DecoderDirectory = Join-Path $taskRoot 'output/slim-decoder' }
+$taskDecoderDirectory = [IO.Path]::GetFullPath($DecoderDirectory)
+$taskDecoder = Get-Item -LiteralPath (Join-Path $taskDecoderDirectory 'ffmpeg.exe')
+if ($taskDecoder.Length -gt 20MB) { throw '视频解码器超过精简版大小限制。' }
+if (!(Test-Path -LiteralPath (Join-Path $taskDecoderDirectory 'licenses') -PathType Container) -or
+    !(Test-Path -LiteralPath (Join-Path $taskDecoderDirectory 'build-info.json'))) { throw '精简解码器缺少来源与许可资料。' }
 $taskReleaseRelative = 'lib/' + $taskVersion
 $taskRelease = Join-Path $taskPackage $taskReleaseRelative
 New-Item -ItemType Directory -Path $taskRelease -Force | Out-Null
@@ -45,7 +52,13 @@ function Copy-PetPackageFile([string]$Relative) {
     New-Item -ItemType Directory -Path (Split-Path $taskTarget -Parent) -Force | Out-Null
     Copy-Item -LiteralPath $taskSource -Destination $taskTarget
 }
-foreach ($taskFile in @('Directory.Build.props','启动芙哇噜.cmd','关闭芙哇噜.cmd','scripts/launch-dragon-girl.ps1','scripts/ReleaseTools.ps1','scripts/setup-runtime.ps1')) { Copy-PetPackageFile $taskFile }
+foreach ($taskFile in @('Directory.Build.props','启动芙哇噜.cmd','关闭芙哇噜.cmd','scripts/launch-dragon-girl.ps1','scripts/ReleaseTools.ps1')) { Copy-PetPackageFile $taskFile }
+$taskPackageRuntime = Join-Path $taskPackage 'runtime'
+New-Item -ItemType Directory -Path $taskPackageRuntime -Force | Out-Null
+Copy-Item -LiteralPath $taskDecoder.FullName -Destination (Join-Path $taskPackageRuntime 'ffmpeg.exe')
+Copy-Item -LiteralPath (Join-Path $taskDecoderDirectory 'licenses') -Destination $taskPackageRuntime -Recurse
+Copy-Item -LiteralPath (Join-Path $taskDecoderDirectory 'build-info.json') -Destination $taskPackageRuntime
+((Get-FileHash -LiteralPath (Join-Path $taskPackageRuntime 'ffmpeg.exe') -Algorithm SHA256).Hash.ToLowerInvariant()) | Set-Content -LiteralPath (Join-Path $taskPackageRuntime 'ffmpeg.sha256') -Encoding ASCII
 function Get-PetAssetReferences($Value) {
     if ($null -eq $Value) { return }
     if ($Value -is [string]) { return }
@@ -82,22 +95,23 @@ foreach ($taskAsset in (@($taskPeek.Atlas) + @($taskPeek.Frames.PSObject.Propert
 @'
 芙哇噜 Windows x64 便携版
 
-1. 将整个 ZIP 解压到你拥有写入权限的普通文件夹。
-2. 双击“启动芙哇噜.cmd”，不要在 ZIP 内运行或只复制 EXE。
-3. 首次启动需要联网，自动下载并校验 FFmpeg 视频解码器；完成后后续启动无需再次下载。
-   包内已包含 .NET 运行环境，无需安装 SDK 或手动编译。
+1. 将整个 ZIP 解压到你拥有写入权限的普通文件夹，会得到 FUWARU 便携版文件夹。
+2. 进入该文件夹，双击“启动芙哇噜.cmd”，不要在 ZIP 内运行或只复制 EXE。
+3. 包内已包含 .NET 运行环境和精简视频解码器，首次启动也无需联网下载依赖。
+   无需安装 SDK 或手动编译。
 4. 设置入口在人物右键或托盘菜单中，可开启开机自启动。
 5. 默认包含现用全部 9 个动作。个人设置和成长记录在此文件夹 local-data 内生成。
 6. 升级时先退出旧版；请保留自己的 local-data，人物素材路径若失效可在设置中重新选择。
 7. 使用 Codex 用量展示需要在自己的电脑上登录 Codex；运行桌宠本身不要求 Codex 账号。
 
 项目与更新：https://github.com/leftdeep/GPT-pet-FUWARU/releases/latest
-FFmpeg 来源：https://ffmpeg.org/download.html 与 https://www.gyan.dev/ffmpeg/builds/
+精简解码器用于播放透明 WebM；制作或转换新动作请使用源码项目与完整 FFmpeg。
+精简解码器的来源与许可在 runtime 中，对应源码与构建流程随 GitHub Release 单独提供。
 .NET 许可和第三方说明保留在 lib 中。
 '@ | Set-Content -LiteralPath (Join-Path $taskPackage '使用说明.txt') -Encoding UTF8
 $taskZip = Join-Path $taskOutput ($taskName + '.zip')
 if (Test-Path -LiteralPath $taskZip) { throw '目标 ZIP 已存在，请选择新的输出目录，避免覆盖。' }
-Compress-Archive -Path (Join-Path $taskPackage '*') -DestinationPath $taskZip -CompressionLevel Optimal
+Compress-Archive -LiteralPath $taskPackage -DestinationPath $taskZip -CompressionLevel Optimal
 $taskZipHash = (Get-FileHash -LiteralPath $taskZip -Algorithm SHA256).Hash.ToLowerInvariant()
 ($taskZipHash + '  ' + [IO.Path]::GetFileName($taskZip)) | Set-Content -LiteralPath ($taskZip + '.sha256') -Encoding ASCII
 @{Version=$taskVersion; PackageDirectory=$taskPackage; Zip=$taskZip; SHA256=$taskZipHash} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $taskOutput 'package-result.json') -Encoding UTF8

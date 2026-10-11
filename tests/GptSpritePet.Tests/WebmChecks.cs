@@ -119,7 +119,9 @@ internal static class WebmChecks
                 check(!Directory.EnumerateFiles(cache, "*.raw", SearchOption.AllDirectories).Any(), "stream decoding writes no raw disk files");
             }
             finally { foreach (var store in many) store.Dispose(); }
-            var start = new ProcessStartInfo(decoder) { UseShellExecute = false, CreateNoWindow = true,
+            // The playback-only release decoder does not encode test fixtures.
+            var fixtureEncoder = Environment.GetEnvironmentVariable("FUWARU_TEST_ENCODER") ?? decoder;
+            var start = new ProcessStartInfo(fixtureEncoder) { UseShellExecute = false, CreateNoWindow = true,
                 RedirectStandardError = true };
             foreach (var arg in new[] { "-nostdin", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi",
                 "-i", "color=red:s=16x16:r=24", "-frames:v", "1", "-c:v", "libvpx-vp9", Path.Combine(cache, "opaque.webm") })

@@ -4,7 +4,7 @@ Windows 透明动画桌宠，基于 C#、WPF 与 .NET 10。包含拖动、走路
 
 ## 构建与启动
 
-普通用户请下载 [Releases 中的 Windows 便携版](https://github.com/leftdeep/GPT-pet-FUWARU/releases/latest) `FUWARU-*-windows-x64.zip`，解压整个文件夹后双击 `启动芙哇噜.cmd`。包内已含 .NET 运行环境和现用 9 个动作；首次启动需要联网，自动下载并校验 FFmpeg 视频解码器。不要把 GitHub 的 **Code → Download ZIP** 或 **Source code (zip)** 当作运行程序，它们是需要自行编译的源码。
+普通用户请下载 [Releases 中的 Windows 便携版](https://github.com/leftdeep/GPT-pet-FUWARU/releases/latest) `FUWARU-*-windows-x64.zip`，解压后进入 `FUWARU` 文件夹，双击 `启动芙哇噜.cmd`。包内已含 .NET 运行环境、精简视频解码器和现用 9 个动作；首次启动也无需联网下载依赖。不要把 GitHub 的 **Code → Download ZIP** 或 **Source code (zip)** 当作运行程序，它们是需要自行编译的源码。
 
 以下步骤用于开发者从源码构建：
 
