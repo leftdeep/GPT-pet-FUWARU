@@ -2,7 +2,7 @@
 
 当前默认转换标准为 **640×640、24 fps、VP9 Alpha、CRF 40**。批量配置与通用转换器一致；共同站立高度为 348.333 像素、脚底线 576。现有 9 个动作、13 个播放分段已从原 MOV 重制，详情见 [640 动作更新](../docs/动作640-CRF40更新-2026-10-10.md)。
 
-- `launch-dragon-girl.ps1`：读取 `pet-release.json` 启动当前完整发布程序，新存档默认使用现用 9 动作 `assets/imported/dragon-girl-calibrated`，缺少时回退至 0.40；保留已有设置和成长存档；解码器缺少时自动运行安装脚本；加 `-Quit` 正常退出，`-Previous` 启动上一发布，`-ResetPosition` 显式重置位置。
+- `launch-dragon-girl.ps1`：读取 `pet-release.json` 启动当前完整发布程序，新存档默认使用现用 9 动作 `assets/imported/dragon-girl-calibrated`，缺少时提示恢复完整素材包；保留已有设置和成长存档；解码器缺少时自动运行安装脚本；加 `-Quit` 正常退出，`-Previous` 启动上一发布，`-ResetPosition` 显式重置位置。
 - `setup-runtime.ps1`：下载、校验并安装 FFmpeg，已有依赖时只检查。
 - `package-portable.ps1`：生成包含 .NET 运行环境、当前动作、启动器及精简视频解码器的 Windows x64 离线 ZIP；不附个人存档。解压时保留单一外层文件夹。
 - `ReleaseTools.ps1`：统一读取版本与发布指针，验证路径和 SHA-256，原子切换发布版本。
