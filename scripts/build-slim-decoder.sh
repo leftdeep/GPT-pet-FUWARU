@@ -37,7 +37,8 @@ else
     download "https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.xz" "$bundle/sources/ffmpeg-$FFMPEG_VERSION.tar.xz"
     download "https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.xz.asc" "$bundle/sources/ffmpeg-$FFMPEG_VERSION.tar.xz.asc"
     download 'https://ffmpeg.org/ffmpeg-devel.asc' "$bundle/sources/ffmpeg-devel.asc"
-    mkdir -m 700 "$work/gnupg"
+    # NTFS ACLs do not implement Unix chmod; this directory holds public keys only.
+    mkdir -p "$work/gnupg"
     gpg --homedir "$work/gnupg" --batch --import "$bundle/sources/ffmpeg-devel.asc"
     gpg --homedir "$work/gnupg" --batch --status-fd 1 --verify \
         "$bundle/sources/ffmpeg-$FFMPEG_VERSION.tar.xz.asc" \
